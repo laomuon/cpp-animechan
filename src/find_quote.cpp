@@ -1,72 +1,116 @@
 #include "find_quote.h"
 #include <iomanip>
+#include <iostream>
 #include <iterator>
 #include <optional>
 #include <ostream>
+#include <string>
+#include <vector>
 
 using namespace findquote;
-std::string FindQuoteClient::random_string()
-{
-    return "/api/random";
-}
+using namespace std;
 
-std::string FindQuoteClient::by_character_string(std::string name)
-{
-    return "/api/random/character?name=" + name;
-}
-
-std::string FindQuoteClient::by_anime_string(std::string anime)
-{
-    return "/api/random/anime?title=" + anime;
-}
-
-std::string FindQuoteClient::get_quote_from_api(std::string request)
+string FindQuoteClient::get_quote_from_api(string request)
 {
     if (auto res = cli.Get(request)) {
-        if (res->status == httplib::StatusCode::OK_200) {
-            return res->body;
-        }
+        return res->body;
     } else {
         auto err = res.error();
         return  "HTTP error: " + httplib::to_string(err);
     }
 }
 
-struct quote FindQuoteClient::parse_from_json(std::string to_parse)
+vector<struct quote> FindQuoteClient::parse_from_json(string to_parse)
 {
-    struct quote quote_info;
     auto js = json::parse(to_parse);
-    js.at("anime").get_to(quote_info.title);
-    js.at("character").get_to(quote_info.character_name);
-    js.at("quote").get_to(quote_info.quote);
-    return quote_info;
+    vector<struct quote> quotes_list;
+    try
+    {
+        struct quote quote_info;
+        js.at("anime").get_to(quote_info.title);
+        js.at("character").get_to(quote_info.character_name);
+        js.at("quote").get_to(quote_info.quote);
+        quotes_list.push_back(quote_info);
+        return quotes_list;
+    }
+    catch (const json::type_error& e)
+    {
+        for (auto &itor : js)
+        {
+            struct quote quote_info {
+                .title=itor["anime"],
+                .character_name=itor["character"],
+                .quote=itor["quote"],
+                .error=""
+            };
+            quotes_list.push_back(quote_info);
+        }
+        return quotes_list;
+    }
+    catch (...)
+    {
+        struct quote quote_info {.title="", .character_name="", .quote="", .error=to_parse};
+        quotes_list.push_back(quote_info);
+        return quotes_list;
+    }
 }
 
-struct quote FindQuoteClient::findQuote()
+vector<struct quote> FindQuoteClient::findQuote(bool in_bulk)
 {
-    std::string res = get_quote_from_api(random_string());
+    string res;
+    if (in_bulk)
+    {
+        res = get_quote_from_api(bulk_string());
+    }
+    else
+    {
+        res = get_quote_from_api(random_string());
+    }
     return parse_from_json(res);
 }
 
-struct quote FindQuoteClient::findQuote(std::string by_type, std::string name)
+vector<struct quote> FindQuoteClient::findQuote(bool in_bulk, string by_type, string name)
 {
-    std::string req;
+    string req;
     struct quote quote_info;
-    if (by_type.compare("anime") == 0)
+    if (in_bulk)
     {
-        req = by_anime_string(name);
+        if (by_type.compare("anime") == 0)
+        {
+            req = by_anime_bulk_string(name);
+        }
+        else if (by_type.compare("character") == 0)
+        {
+            req = by_character_bulk_string(name);
+        }
     }
-    else if (by_type.compare("character") == 0)
-    {
-        req = by_character_string(name);
+    else {
+        if (by_type.compare("anime") == 0)
+        {
+            req = by_anime_string(name);
+        }
+        else if (by_type.compare("character") == 0)
+        {
+            req = by_character_string(name);
+        }
     }
-    std::string res = get_quote_from_api(req);
+    string res = get_quote_from_api(req);
     return parse_from_json(res);
 }
 
-void findquote::print_quote(struct quote quote_info)
+void findquote::print_quote(vector<struct quote> quotes_list)
 {
-    std::cout << "Title: " << quote_info.title << std::endl;
-    std::cout << "Character: " << quote_info.character_name << std::endl;
-    std::cout << "Quote: " << quote_info.quote << std::endl;
+    for (auto iter = quotes_list.begin(); iter != quotes_list.end(); ++iter)
+    {
+        if (iter->error.compare("") == 0)
+        {
+            cout << "Title: " << iter->title << endl;
+            cout << "Character: " << iter->character_name << endl;
+            cout << "Quote: " << iter->quote << endl;
+        }
+        else
+        {
+            cout << "Error: " << iter->error << endl;
+        }
+    }
 }
