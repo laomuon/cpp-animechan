@@ -19,7 +19,7 @@ sudo chmod +x install.sh
 ```
 
 ## Usage
-```bash
+```
  Usage: cpp-anichan [OPTION 1] [NAME 1] [OPTION 2] [NAME 2] ...
  Without options, a random quote from a random character in a random anime will be printed
 
