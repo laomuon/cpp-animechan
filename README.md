@@ -6,6 +6,7 @@
 ## Requirements
 - cmake >= 3.10
 - c++ 17
+- OpenSSL (install with `apt install libssl-dev` on Ubuntu)
 
 ## Installation
 ```bash
