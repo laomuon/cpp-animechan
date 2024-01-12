@@ -44,3 +44,4 @@ sudo chmod +x install.sh
 - C++ library:
     * [nlohmann/json](https://github.com/nlohmann/json) for json deserializing.
     * [yhirose/cpp-httplib](https://github.com/yhirose/cpp-httplib) for HTTP/HTTPS methods
+- [charmbracelet/vhs](https://github.com/charmbracelet/vhs) to generate the terminal GIF
