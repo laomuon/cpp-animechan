@@ -1,6 +1,7 @@
 #include <cstring>
 #include <string>
 #include <vector>
+#define CPPHTTPLIB_OPENSSL_SUPPORT
 #include "httplib.h"
 #include "nlohmann/json.hpp"
 #define API_LINK "https://animechan.xyz"

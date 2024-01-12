@@ -5,6 +5,7 @@
 #include <optional>
 #include <ostream>
 #include <string>
+#include <thread>
 #include <vector>
 
 using namespace findquote;
@@ -98,15 +99,25 @@ vector<struct quote> FindQuoteClient::findQuote(bool in_bulk, string by_type, st
     return parse_from_json(res);
 }
 
+void pretty_print(string s)
+{
+    for (int i = 0; i < s.size(); i++)
+    {
+        cout << s[i];
+        cout.flush();
+        this_thread::sleep_for(chrono::milliseconds(200));
+    }
+}
+
 void findquote::print_quote(vector<struct quote> quotes_list)
 {
     for (auto iter = quotes_list.begin(); iter != quotes_list.end(); ++iter)
     {
         if (iter->error.compare("") == 0)
         {
-            cout << "Title: " << iter->title << endl;
-            cout << "Character: " << iter->character_name << endl;
-            cout << "Quote: " << iter->quote << endl;
+            pretty_print("Title: " + iter->title + "\n");
+            pretty_print("Character: " + iter->character_name + "\n");
+            pretty_print("Quote: " + iter->quote + "\n");
         }
         else
         {
@@ -114,3 +125,4 @@ void findquote::print_quote(vector<struct quote> quotes_list)
         }
     }
 }
+
