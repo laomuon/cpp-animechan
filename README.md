@@ -1,5 +1,7 @@
 <h1 align=center>cpp-animechan</h1>
 
+![alt text](assets/demo.gif)
+
 ## About
 `cpp-animechan` is a CLI program to print anime quote to the terminal, written in C++.
 
