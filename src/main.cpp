@@ -8,7 +8,7 @@ using namespace findquote;
 void print_help()
 {
     cout << "A command line tool to print anime quote to the terminal, written in C++" << endl << endl
-        << "Usage: cpp-anichan [OPTION 1] [NAME 1] [OPTION 2] [NAME 2] ..." << endl << endl
+        << "Usage: cpp-animechan [OPTION 1] [NAME 1] [OPTION 2] [NAME 2] ..." << endl << endl
         << "Without options, a random quote from a random character in a random anime will be printed"
         << endl << endl
         << "Options:" << endl
