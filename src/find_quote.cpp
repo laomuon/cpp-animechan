@@ -103,9 +103,14 @@ void pretty_print(string s)
 {
     for (int i = 0; i < s.size(); i++)
     {
+        int sleep_time = 50;
+        if (s[i] == ':' | s[i] == '\n')
+        {
+            sleep_time = 200;
+        }
         cout << s[i];
         cout.flush();
-        this_thread::sleep_for(chrono::milliseconds(200));
+        this_thread::sleep_for(chrono::milliseconds(sleep_time));
     }
 }
 

@@ -25,6 +25,8 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/json/
 )
 
+install(TARGETS ${PROJECT_NAME})
+
 # Set C++ version
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 17
