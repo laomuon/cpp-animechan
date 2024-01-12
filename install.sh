@@ -1,5 +1,6 @@
 #!/bin/sh
 
+sudo apt install libssl-dev
 mkdir build
 cd build
 cmake ..
