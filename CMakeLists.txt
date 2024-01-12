@@ -5,17 +5,12 @@ project(cpp-animechan VERSION 0.1 DESCRIPTION "A CLI program to print anime quot
 # Create compile_commands.json file for the LSP
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_subdirectory(cpp-httplib)
-add_subdirectory(json)
-
 add_executable(${PROJECT_NAME} src/main.cpp src/find_quote.cpp)
-
-target_link_libraries(${PROJECT_NAME} httplib nlohmann_json::nlohmann_json)
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/cpp-httplib
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/json
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/json/
 )
 
 # Set C++ version
